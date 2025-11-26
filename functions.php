@@ -3,6 +3,7 @@ include 'config.php';
 
 if(isset($_POST["function"])){$function = $_POST["function"];}else{$function = null;}
 if(isset($_POST["value"])){$value = $_POST["value"];}else{$value = null;}
+if(isset($_POST["sort"])){$sort = $_POST["sort"];}else{$sort = null;}
 if(isset($_POST["json"])){$json = $_POST["json"];}else{$json = null;}
 
 $options = array('Dark Elf',
@@ -168,10 +169,7 @@ if($function=="getData"){
 		
 	}
 	
-	
-	
-	$sql = "SELECT $orderby, COUNT(1) AS `Total Merchants`, SUM(Gold) AS Gold FROM morrowindeconomy WHERE $where GROUP BY $orderby ORDER BY SUM(Gold) DESC";
-//	echo $sql;
+	$sql = "SELECT $orderby, COUNT(1) AS `Total Merchants`, SUM(Gold) AS Gold, AVG(Gold) AS `Average Gold` FROM morrowindeconomy WHERE $where GROUP BY $orderby ORDER BY SUM(Gold) DESC";
 	
 	try{
 		$result = $con->query($sql);
@@ -180,9 +178,16 @@ if($function=="getData"){
 			$rows[] = $row;
 		}
 		echo json_encode($rows);
+		
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$query = "INSERT INTO logs (RemoteIP) VALUES ('$ip')";
+		mysqli_query($con, $query);
+		
 	}catch(Exception $e){
-//		echo $e->getMessage();
+		echo $e->getMessage();
 	}
+	
+	
 }
 
 $con->close();

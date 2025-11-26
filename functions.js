@@ -1,8 +1,8 @@
 const sections = ['Race','Location','Expansion','Class','Faction'];
 
-function getJSONData(name, value, json, callback){
+function getJSONData(name, value, sort, json, callback){
 
-	var params = "function="+name+"&value="+value+'&json='+json;
+	var params = "function="+name+"&value="+value+'&sort='+sort+'&json='+json;
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", "functions.php", true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -16,23 +16,23 @@ function getJSONData(name, value, json, callback){
 
 function start(){
 	
-	getJSONData("getRaces", "", "", function(data){
+	getJSONData("getRaces", "", "", "", function(data){
 		addFilterElements(data);
 	});	
 	
-	getJSONData("getClasses", "", "", function(data){
+	getJSONData("getClasses", "", "", "", function(data){
 		addFilterElements(data);
 	});
 	
-	getJSONData("getLocations", "", "", function(data){
+	getJSONData("getLocations", "", "", "", function(data){
 		addFilterElements(data);
 	});
 	
-	getJSONData("getExpansions", "", "", function(data){
+	getJSONData("getExpansions", "", "", "", function(data){
 		addFilterElements(data);
 	});
 	
-	getJSONData("getFactions", "", "", function(data){
+	getJSONData("getFactions", "", "", "", function(data){
 		addFilterElements(data);
 	});
 }
@@ -145,7 +145,8 @@ function selectAllCheckBox(c){
 
 function fetchData(b){
 	b.setAttribute('disabled','true');
-	var selectValue = document.getElementById('sortBySelectId').value;
+	var selectValue = document.getElementById('showSelectId').value;
+	var sortValue = document.getElementById('sortBySelectId').value;
 	var excludes = '{';
 	var s = 0; //s is iteration index for sections array
 	sections.forEach(function(section){
@@ -170,7 +171,7 @@ function fetchData(b){
 	});
 	excludes = excludes + '}';
 
-	getJSONData("getData", selectValue, excludes, function(data){
+	getJSONData("getData", selectValue, sortValue, excludes, function(data){
 		console.log(data);
 		buildTable(data);
 		b.disabled = false;
@@ -190,38 +191,45 @@ function buildTable(json){
 		//clear out any existing children
 		container.innerHTML = '';
 		
-		//Create columns for each key in first name
+		const table = document.createElement('table');
+		table.classList.add('border');
+		table.classList.add('m-2');
+		container.appendChild(table);
+		
+		//Create header row of table using keys from first node
+		
+		
+		const tableHeader = document.createElement('tr');
+		table.appendChild(tableHeader);
+		
 		Object.keys(obj[0]).forEach(key => { 
-			const colDiv = document.createElement('div');
-			colDiv.id = key + '_col';
-			colDiv.classList.add('col');
+			const th = document.createElement('th');
+			th.textContent = key;
 			
-			container.appendChild(colDiv);
+			tableHeader.appendChild(th);
 			
-			const rowDiv = document.createElement('div');
-			rowDiv.classList.add('row');
-			rowDiv.textContent = key;
-			
-			colDiv.appendChild(rowDiv);
-			
-			Object.keys(obj).forEach(node => {
-				let _value = obj[node][key];
-				
-				const cellDiv = document.createElement('div');
-				cellDiv.textContent = _value;
-				cellDiv.classList.add('row');
-				colDiv.appendChild(cellDiv);
-			});
 		});
-
+		
+		for(let i = 1; i < obj.length; i++){
+			const row = document.createElement('tr');
+			table.appendChild(row);
+			Object.keys(obj[i]).forEach(key => {
+				let _value = obj[i][key];
+				
+				const cell = document.createElement('td');
+				cell.textContent = _value;
+				row.appendChild(cell);
+			});
+			
+		}
+		
 		//Iterate through all data
 		Object.keys(obj).forEach(key => {
 			
 			Object.keys(obj[key]).forEach(k => {
 				
-			console.log(`Key2: ${k}, Value: ${obj[key][k]}`);
-			
-			
+			//console.log(`Key2: ${k}, Value: ${obj[key][k]}`);
+				
 			});
 		});
 	} catch (error) {

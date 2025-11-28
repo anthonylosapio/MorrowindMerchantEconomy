@@ -11,7 +11,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="bootstrap.css" rel="stylesheet">
-		<script src="functions.js?5"></script>
+		<script src="functions.js?7"></script>
 		<script>
 			window.onload = function() {
 				start();
@@ -28,7 +28,7 @@
 			<div class="row mb-2">
 			
 				<div class="col-sm-2 border">
-					<div class="row">
+					<div class="row px-2 pt-2">
 						<button class="btn border" onclick="fetchData(this)">Get Data</button>
 					</div>
 					<div class="row px-3">

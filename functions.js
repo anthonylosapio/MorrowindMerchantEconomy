@@ -3,6 +3,7 @@ const sections = ['Race','Location','Expansion','Class','Faction'];
 function getJSONData(name, value, sort, json, callback){
 
 	var params = "function="+name+"&value="+value+'&sort='+sort+'&json='+json;
+	//console.log(params);
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", "functions.php", true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -182,7 +183,7 @@ function buildTable(json){
 	try {
 		const obj = JSON.parse(json);
 		
-		console.log(obj);
+		//console.log(obj);
 		
 		
 		//get the container
@@ -210,7 +211,7 @@ function buildTable(json){
 			
 		});
 		
-		for(let i = 1; i < obj.length; i++){
+		for(let i = 0; i < obj.length; i++){
 			const row = document.createElement('tr');
 			table.appendChild(row);
 			Object.keys(obj[i]).forEach(key => {

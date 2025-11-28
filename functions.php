@@ -117,6 +117,8 @@ $options = array('Dark Elf',
 
 $sections = array('Race','Location','Expansion','Class','Faction');
 
+$sorts = array('COUNT(1)','SUM(Gold)','AVG(Gold)');
+
 if($function=="getRaces" || $function=="getClasses" || $function=="getLocations" || $function=="getExpansions" || $function=="getFactions"){
 	
 	$filter = "";
@@ -141,12 +143,17 @@ if($function=="getRaces" || $function=="getClasses" || $function=="getLocations"
 
 if($function=="getData"){
 
-	$orderby = "";
-	if($value=="Race"){$orderby = $sections[0];}
-	if($value=="Location"){$orderby = $sections[1];}
-	if($value=="Expansion"){$orderby = $sections[2];}
-	if($value=="Class"){$orderby = $sections[3];}
-	if($value=="Faction"){$orderby = $sections[4];}
+	$groupby = "Race";
+	if($value=="Race"){$groupby = $sections[0];}
+	if($value=="Location"){$groupby = $sections[1];}
+	if($value=="Expansion"){$groupby = $sections[2];}
+	if($value=="Class"){$groupby = $sections[3];}
+	if($value=="Faction"){$groupby = $sections[4];}
+	
+	$sortby = "SUM(Gold)";
+	if($sort=="Total Merchants"){$sortby = $sorts[0];}
+	if($sort=="Total Gold"){$sortby = $sorts[1];}
+	if($sort=="Average Gold'"){$sortby = $sorts[2];}
 
 	$j = json_decode($json, true);
 	
@@ -169,8 +176,8 @@ if($function=="getData"){
 		
 	}
 	
-	$sql = "SELECT $orderby, COUNT(1) AS `Total Merchants`, SUM(Gold) AS Gold, AVG(Gold) AS `Average Gold` FROM morrowindeconomy WHERE $where GROUP BY $orderby ORDER BY SUM(Gold) DESC";
-	
+	$sql = "SELECT $groupby, COUNT(1) AS `Total Merchants`, SUM(Gold) AS `Total Gold`, AVG(Gold) AS `Average Gold` FROM morrowindeconomy WHERE $where GROUP BY $groupby ORDER BY $sortby DESC";
+	//echo $sql;
 	try{
 		$result = $con->query($sql);
 		$rows = array();

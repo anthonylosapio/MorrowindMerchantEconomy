@@ -11,23 +11,28 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="bootstrap.css" rel="stylesheet">
-		<script src="functions.js?7"></script>
+		<script src="functions.js?8"></script>
 		<script>
 			window.onload = function() {
 				start();
 			};
 		</script>
+		<style>
+			.content{
+				background-color: #9E885E;
+			}
+		</style>
  	</head>
-	<body>
+	<body style="background-color: #2B1A08;">
 		<div class="container">
-			<div class="row border mb-2">
+			<div class="row border mb-2 content">
 				<h1>The Morrowind Merchant Economy</h1>
 				<p>How much money is there in Morrowind and who has it?</p>	
 			</div>
 
 			<div class="row mb-2">
 			
-				<div class="col-sm-2 border">
+				<div class="col-sm-2 border content">
 					<div class="row px-2 pt-2">
 						<button class="btn border" onclick="fetchData(this)">Get Data</button>
 					</div>
@@ -55,14 +60,14 @@
 					<div id="ResultsDiv" class="row p-1"></div>
 				</div>
 			</div>
-			<div class="row border p-1">
+			<div class="row border p-1 content">
 				<div class="col">
 					<p>Data for this project was obtained from:<br>
 					<a href="https://en.uesp.net/wiki/Morrowind:Merchants" target="_blank">https://en.uesp.net/wiki/Morrowind:Merchants</a><br>
 					<a href="https://en.uesp.net/wiki/Tribunal:Services#Merchants" target="_blank">https://en.uesp.net/wiki/Tribunal:Services#Merchants</a><br>
 					<a href="https://en.uesp.net/wiki/Bloodmoon:Merchants" target="_blank">https://en.uesp.net/wiki/Bloodmoon:Merchants</a></p>
 				</div>
-				<div class="col">
+				<div class="col content">
 					<p>Notes about the data:<br>
 					<ul>
 						<li>Todd Test and Lord Cluttermonkey merchants are not included in the data because they do not appear in the actual game.</li>
@@ -72,8 +77,10 @@
 					</p>
 				</div>
 			</div>
-			<div class="row border p-1 text-center">
-				<p>This project is open source <a href="https://github.com/anthonylosapio/MorrowindMerchantEconomy">https://github.com/anthonylosapio/MorrowindMerchantEconomy</a></p>
+			<div class="row text-center">
+				<div class="col border my-1 text-center content">
+					<p>This project is open source <a href="https://github.com/anthonylosapio/MorrowindMerchantEconomy">https://github.com/anthonylosapio/MorrowindMerchantEconomy</a></p>
+				</div>
 			</div>
 		</div>
 	</body>

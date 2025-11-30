@@ -195,6 +195,7 @@ function buildTable(json){
 		const table = document.createElement('table');
 		table.classList.add('border');
 		table.classList.add('m-2');
+		table.classList.add('content');
 		container.appendChild(table);
 		
 		//Create header row of table using keys from first node

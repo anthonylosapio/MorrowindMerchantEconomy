@@ -11,7 +11,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="bootstrap.css" rel="stylesheet">
-		<script src="functions.js?8"></script>
+		<script src="functions.js?1"></script>
 		<script>
 			window.onload = function() {
 				start();
@@ -20,6 +20,39 @@
 		<style>
 			.content{
 				background-color: #9E885E;
+
+			}
+			body{
+				background-image: url("img/bg.avif");
+			}
+			a:link {
+				color: purple;
+				text-decoration: none;
+			}
+			a:visited {
+				color: indigo;
+			}
+
+			a:hover {
+				color: orange;
+				text-decoration: underline;
+			}
+			a:active {
+				color: red;
+			}
+			input[type="checkbox"] {
+				accent-color: purple;
+			}
+			.PlusMinusSpan{
+				font-weight: 800;
+				font-size: 1.1rem;
+			}
+			.btn:hover {
+				outline: 1px solid orange;
+			}
+			.filterBtn{
+				width: 100%;
+				text-align: left;
 			}
 		</style>
  	</head>
@@ -57,7 +90,24 @@
 					</div>				
 				</div>
 				<div class="col-lg-8">
-					<div id="ResultsDiv" class="row p-1"></div>
+					<div id="ResultsDiv" class="row p-1">
+						<div class="content">
+							How to use this site.
+							<ul>
+								<li>Choose how you want the aggregated data to be grouped by selecting Race, Class, Location, Expansion, or Faction.</li>
+								<li>Choose how you want the aggregated data to be sorted (always descending) either by Total Gold, Total Merchants, or Average Gold.</li>
+								<li>Expand the Race, Class, Expansion, Faction, & Location section to de-select anything you want to exclude from the final results & aggregation (for example, if you only want to see data for the base game, expand the "Expansion" section and un-select Tribunal & Bloodmoon).</li>
+								<li>Click the Get Data button</li>
+							</ul>
+							<p>As an example, if you want to see which Faction has the most merchants in Vivec city you would:</p>
+							<ul>
+								<li>Select <b>Faction</b> from the Show drop down.</li>
+								<li>Select <b>Total Merchants</b> from the Sort By Drop Down.</li>
+								<li>Expand <b>Location</b> and de-select everything but Vivec.</li>
+								<li>Click the Get Data button</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="row border p-1 content">

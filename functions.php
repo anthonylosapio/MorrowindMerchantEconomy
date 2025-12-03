@@ -153,7 +153,7 @@ if($function=="getData"){
 	$sortby = "SUM(Gold)";
 	if($sort=="Total Merchants"){$sortby = $sorts[0];}
 	if($sort=="Total Gold"){$sortby = $sorts[1];}
-	if($sort=="Average Gold'"){$sortby = $sorts[2];}
+	if($sort=="Average Gold"){$sortby = $sorts[2];}
 
 	$j = json_decode($json, true);
 	
@@ -168,7 +168,7 @@ if($function=="getData"){
 				$key = "$i";
 				$value = $j[$section][0][$key];
 				if( $i>0 ){ $where = $where . ","; }
-				$where = $where . "'" . $value . "'";
+				$where = $where . '"' . $value . '"';
 			}
 			$where = $where . ")";	
 			

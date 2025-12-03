@@ -54,11 +54,18 @@ function addFilterElements(data){
 	container.appendChild(div);
 	
 	const header = document.createElement('h1');
-	header.id = sectionHeaderText + "HeaderId";
-	header.textContent = sectionHeaderText + " +";
+	const span1 = document.createElement('span');
+	const span2 = document.createElement('span');
+	header.id = sectionHeaderText + "HeaderId";	
 	header.classList.add('btn');
+	header.classList.add('filterBtn');
 	header.setAttribute('section', sectionHeaderText);
 	div.appendChild(header);
+	
+	span1.textContent = sectionHeaderText;
+	span2.textContent = '+';
+	span2.classList.add('PlusMinusSpan');
+	header.append(span1, span2);
 	
 	const collapsingDiv = document.createElement('div');
 	collapsingDiv.id = sectionHeaderText + "CollapseId";
@@ -117,15 +124,16 @@ function toggleCollapse(h){
 	var targetName = h.getAttribute('toggle-target');
 	var target = document.getElementById(targetName);
 	var section = h.getAttribute('section');
+	const span = h.querySelector('.PlusMinusSpan');
 	
 	if(state==1){
 		target.classList.remove('collapse');
 		h.setAttribute('is-collapsed', '0');
-		h.textContent = section + ' -';
+		span.textContent = '-';
 	}else{
 		target.classList.add('collapse');
 		h.setAttribute('is-collapsed', '1');
-		h.textContent = section + ' +';
+		span.textContent = '+';
 	}
 }
 

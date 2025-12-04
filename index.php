@@ -1,5 +1,5 @@
 <?php
-
+include 'config.php';
 ?>
 <!DOCTYPE html>
 <html land="en">
@@ -130,6 +130,19 @@
 			<div class="row text-center">
 				<div class="col border my-1 text-center content">
 					<p>This project is open source <a href="https://github.com/anthonylosapio/MorrowindMerchantEconomy">https://github.com/anthonylosapio/MorrowindMerchantEconomy</a></p>
+					<p>This data has been queried <span style="font-weight: bold;">
+					<?php 
+						try{
+							$sql = "SELECT COUNT(1) FROM logs";
+							$result = $con->query($sql);
+							$row   = mysqli_fetch_row($result);
+							echo $row[0];
+						}catch(Exception $e){
+							echo $e->getMessage();
+						}
+					?>
+					</span> times.
+					</p>
 				</div>
 			</div>
 		</div>

@@ -181,7 +181,7 @@ function fetchData(b){
 	excludes = excludes + '}';
 
 	getJSONData("getData", selectValue, sortValue, excludes, function(data){
-		console.log(data);
+		//console.log(data);
 		buildTable(data);
 		b.disabled = false;
 	});
@@ -195,10 +195,22 @@ function buildTable(json){
 		
 		
 		//get the container
-		const container = document.getElementById("ResultsDiv");
+		const container = document.getElementById('ResultsDiv');
 		
 		//clear out any existing children
 		container.innerHTML = '';
+		
+		//create tabs
+		const tabRow = document.createElement('div');
+		tabRow.classList.add('d-flex');
+		const aggregateTab = document.createElement('button');
+		aggregateTab.classList.add('btn');
+		aggregateTab.textContent = 'Aggregated Data';
+		const rawTab = document.createElement('button');
+		rawTab.classList.add('btn');
+		rawTab.textContent = 'Raw Data';
+		tabRow.append(aggregateTab, rawTab);
+		container.appendChild(tabRow);
 		
 		const table = document.createElement('table');
 		table.classList.add('border');

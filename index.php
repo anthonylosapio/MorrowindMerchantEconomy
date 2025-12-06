@@ -11,7 +11,7 @@ include 'config.php';
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="bootstrap.css" rel="stylesheet">
-		<script src="functions.js?1"></script>
+		<script src="functions.js?2"></script>
 		<script>
 			window.onload = function() {
 				start();
@@ -53,6 +53,27 @@ include 'config.php';
 			.filterBtn{
 				width: 100%;
 				text-align: left;
+			}
+			.selectedTab{
+				background-color: #9E885E;
+				border-top: 1px solid black;
+				border-right: 1px solid black;
+				border-left: 1px solid black;
+				border-bottom: none;
+				border-top-left-radius: 10px;
+				border-top-right-radius: 10px;
+				border-bottom-left-radius: 0px;
+				border-bottom-right-radius: 0px;
+			}
+			.unselectedTab{
+				background-color: #9E885E;
+				border-top-left-radius: 10px;
+				border-top-right-radius: 10px;
+				border-bottom-left-radius: 0px;
+				border-bottom-right-radius: 0px;
+			}
+			.tableBorder{
+				
 			}
 		</style>
  	</head>

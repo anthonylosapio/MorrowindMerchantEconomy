@@ -204,17 +204,24 @@ function buildTable(json){
 		const tabRow = document.createElement('div');
 		tabRow.classList.add('d-flex');
 		const aggregateTab = document.createElement('button');
-		aggregateTab.classList.add('btn');
+		aggregateTab.id = 'aggregateTabId';
+//		aggregateTab.classList.add('btn');
+		aggregateTab.classList.add('selectedTab');
 		aggregateTab.textContent = 'Aggregated Data';
+		aggregateTab.setAttribute('onclick','resultsTabClick(this)');
 		const rawTab = document.createElement('button');
-		rawTab.classList.add('btn');
+		rawTab.id = 'rawTabId';
+//		rawTab.classList.add('btn');
+		rawTab.classList.add('unselectedTab');
 		rawTab.textContent = 'Raw Data';
+		rawTab.setAttribute('onclick','resultsTabClick(this)');
 		tabRow.append(aggregateTab, rawTab);
 		container.appendChild(tabRow);
 		
 		const table = document.createElement('table');
-		table.classList.add('border');
-		table.classList.add('m-2');
+		table.classList.add('tableBorder');
+		table.classList.add('mx-2');
+		table.classList.add('mb-2');
 		table.classList.add('content');
 		container.appendChild(table);
 		
@@ -224,7 +231,7 @@ function buildTable(json){
 		const tableHeader = document.createElement('tr');
 		table.appendChild(tableHeader);
 		
-		Object.keys(obj[0]).forEach(key => { 
+		Object.keys(obj['aggregate'][0]).forEach(key => { 
 			const th = document.createElement('th');
 			th.textContent = key;
 			
@@ -232,11 +239,11 @@ function buildTable(json){
 			
 		});
 		
-		for(let i = 0; i < obj.length; i++){
+		for(let i = 0; i < obj['aggregate'].length; i++){
 			const row = document.createElement('tr');
 			table.appendChild(row);
-			Object.keys(obj[i]).forEach(key => {
-				let _value = obj[i][key];
+			Object.keys(obj['aggregate'][i]).forEach(key => {
+				let _value = obj['aggregate'][i][key];
 				
 				const cell = document.createElement('td');
 				cell.textContent = _value;
@@ -257,4 +264,17 @@ function buildTable(json){
 	} catch (error) {
 		console.error("Error parsing JSON:", error.message);
 	}
+}
+function resultsTabClick(selectedTab){
+	var unSelectedTab;
+	if(selectedTab.id=='aggregateTabId'){
+		unSelectedTab = document.getElementById('rawTabId');
+	}else{
+		unSelectedTab = document.getElementById('aggregateTabId');
+	}	
+	selectedTab.classList.remove('unselectedTab');
+	selectedTab.classList.add('selectedTab');
+
+	unSelectedTab.classList.remove('selectedTab');
+	unSelectedTab.classList.add('unselectedTab');
 }

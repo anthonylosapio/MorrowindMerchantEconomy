@@ -176,15 +176,21 @@ if($function=="getData"){
 		
 	}
 	
-	$sql = "SELECT $groupby, COUNT(1) AS `Total Merchants`, SUM(Gold) AS `Total Gold`, AVG(Gold) AS `Average Gold` FROM morrowindeconomy WHERE $where GROUP BY $groupby ORDER BY $sortby DESC";
+
 	//echo $sql;
 	try{
+		$sql = "SELECT $groupby, COUNT(1) AS `Total Merchants`, SUM(Gold) AS `Total Gold`, AVG(Gold) AS `Average Gold` FROM morrowindeconomy WHERE $where GROUP BY $groupby ORDER BY $sortby DESC";		
 		$result = $con->query($sql);
-		$rows = array();
+		$rowset1 = array();
 		while($row = $result->fetch_assoc()) {
-			$rows[] = $row;
+			$rowset1[] = $row;
 		}
-		echo json_encode($rows);
+		
+		$output = [
+			"aggregate" => $rowset1
+			//,"raw" => $rowset2
+		];
+		echo json_encode($output);
 		
 		$ip = $_SERVER['REMOTE_ADDR'];
 		$query = "INSERT INTO logs (RemoteIP) VALUES ('$ip')";

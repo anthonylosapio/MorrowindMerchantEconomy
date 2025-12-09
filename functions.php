@@ -175,7 +175,6 @@ if($function=="getData"){
 		}
 		
 	}
-	
 
 	//echo $sql;
 	try{
@@ -185,10 +184,17 @@ if($function=="getData"){
 		while($row = $result->fetch_assoc()) {
 			$rowset1[] = $row;
 		}
+
+		$sql = "SELECT Name,Race,Class,Faction,Gold,Location,Expansion FROM morrowindeconomy WHERE $where ORDER BY Gold DESC";		
+		$result = $con->query($sql);
+		$rowset2 = array();
 		
+		while($row = $result->fetch_assoc()) {
+			$rowset2[] = $row;
+		}		
 		$output = [
 			"aggregate" => $rowset1
-			//,"raw" => $rowset2
+			,"raw" => $rowset2
 		];
 		echo json_encode($output);
 		

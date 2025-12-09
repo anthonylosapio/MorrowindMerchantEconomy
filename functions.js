@@ -191,7 +191,7 @@ function buildTable(json){
 	try {
 		const obj = JSON.parse(json);
 		
-		//console.log(obj);
+		console.log(obj);
 		
 		
 		//get the container
@@ -218,18 +218,18 @@ function buildTable(json){
 		tabRow.append(aggregateTab, rawTab);
 		container.appendChild(tabRow);
 		
-		const table = document.createElement('table');
-		table.classList.add('tableBorder');
-		table.classList.add('mx-2');
-		table.classList.add('mb-2');
-		table.classList.add('content');
-		container.appendChild(table);
+		const aggTable = document.createElement('table');
+		aggTable.classList.add('tableBorder');
+		aggTable.classList.add('mx-2');
+		aggTable.classList.add('mb-2');
+		aggTable.classList.add('content');
+		aggTable.classList.add('dataTable');
+		aggTable.id = 'AggTableId';
+		container.appendChild(aggTable);
 		
 		//Create header row of table using keys from first node
-		
-		
 		const tableHeader = document.createElement('tr');
-		table.appendChild(tableHeader);
+		aggTable.appendChild(tableHeader);
 		
 		Object.keys(obj['aggregate'][0]).forEach(key => { 
 			const th = document.createElement('th');
@@ -241,12 +241,48 @@ function buildTable(json){
 		
 		for(let i = 0; i < obj['aggregate'].length; i++){
 			const row = document.createElement('tr');
-			table.appendChild(row);
+			aggTable.appendChild(row);
 			Object.keys(obj['aggregate'][i]).forEach(key => {
 				let _value = obj['aggregate'][i][key];
 				
 				const cell = document.createElement('td');
 				cell.textContent = _value;
+				cell.classList.add('dataCell');
+				row.appendChild(cell);
+			});
+			
+		}
+		
+		const rawTable = document.createElement('table');
+		rawTable.classList.add('tableBorder');
+		rawTable.classList.add('mx-2');
+		rawTable.classList.add('mb-2');
+		rawTable.classList.add('content');
+		rawTable.classList.add('d-none');
+		rawTable.classList.add('dataTable');
+		rawTable.id = 'RawTableId';
+		container.appendChild(rawTable);
+		
+		//Create header row of table using keys from first node
+		const rawTableHeader = document.createElement('tr');
+		rawTable.appendChild(rawTableHeader);
+		
+		Object.keys(obj['raw'][0]).forEach(key => { 
+			const th = document.createElement('th');
+			th.textContent = key;
+			rawTableHeader.appendChild(th);
+			
+		});
+		
+		for(let i = 0; i < obj['raw'].length; i++){
+			const row = document.createElement('tr');
+			rawTable.appendChild(row);
+			Object.keys(obj['raw'][i]).forEach(key => {
+				let _value = obj['raw'][i][key];
+				
+				const cell = document.createElement('td');
+				cell.textContent = _value;
+				cell.classList.add('dataCell');
 				row.appendChild(cell);
 			});
 			
@@ -267,14 +303,22 @@ function buildTable(json){
 }
 function resultsTabClick(selectedTab){
 	var unSelectedTab;
+	var selectedTable;
+	var unSelectedTable;
 	if(selectedTab.id=='aggregateTabId'){
 		unSelectedTab = document.getElementById('rawTabId');
+		unSelectedTable = document.getElementById('RawTableId');
+		selectedTable = document.getElementById('AggTableId');
 	}else{
 		unSelectedTab = document.getElementById('aggregateTabId');
+		unSelectedTable = document.getElementById('AggTableId');
+		selectedTable = document.getElementById('RawTableId');
 	}	
 	selectedTab.classList.remove('unselectedTab');
-	selectedTab.classList.add('selectedTab');
+	selectedTab.classList.add('selectedTab');	
+	selectedTable.classList.remove('d-none');
 
 	unSelectedTab.classList.remove('selectedTab');
 	unSelectedTab.classList.add('unselectedTab');
+	unSelectedTable.classList.add('d-none');
 }

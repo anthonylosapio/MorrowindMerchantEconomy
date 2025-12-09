@@ -11,7 +11,7 @@ include 'config.php';
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="bootstrap.css" rel="stylesheet">
-		<script src="functions.js?2"></script>
+		<script src="functions.js?3"></script>
 		<script>
 			window.onload = function() {
 				start();
@@ -72,8 +72,16 @@ include 'config.php';
 				border-bottom-left-radius: 0px;
 				border-bottom-right-radius: 0px;
 			}
-			.tableBorder{
-				
+			.dataTable{
+				margin-left: auto;
+				margin-right: auto
+				padding-left: 5px;
+				padding-right: 5px;
+				border-collapse: collapse;
+			}
+			.dataCell{
+				border-bottom: 1px solid #A9A79E;
+				border-left: 1px solid #A9A79E;
 			}
 		</style>
  	</head>
@@ -110,8 +118,8 @@ include 'config.php';
 					<p>Include / Exclude</p>
 					</div>				
 				</div>
-				<div class="col-lg-8">
-					<div id="ResultsDiv" class="row p-1">
+				<div class="col">
+					<div id="ResultsDiv" class="row p-1" style="overflow-x: hidden; overflow-y: auto; max-height: 700px;">
 						<div class="content">
 							How to use this site.
 							<ul>

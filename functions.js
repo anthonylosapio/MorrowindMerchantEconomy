@@ -200,18 +200,16 @@ function buildTable(json){
 		//clear out any existing children
 		container.innerHTML = '';
 		
-		//create tabs
+		//create row div to house the tabs
 		const tabRow = document.createElement('div');
 		tabRow.classList.add('d-flex');
 		const aggregateTab = document.createElement('button');
 		aggregateTab.id = 'aggregateTabId';
-//		aggregateTab.classList.add('btn');
 		aggregateTab.classList.add('selectedTab');
 		aggregateTab.textContent = 'Aggregated Data';
 		aggregateTab.setAttribute('onclick','resultsTabClick(this)');
 		const rawTab = document.createElement('button');
 		rawTab.id = 'rawTabId';
-//		rawTab.classList.add('btn');
 		rawTab.classList.add('unselectedTab');
 		rawTab.textContent = 'Raw Data';
 		rawTab.setAttribute('onclick','resultsTabClick(this)');
@@ -228,8 +226,10 @@ function buildTable(json){
 		container.appendChild(aggTable);
 		
 		//Create header row of table using keys from first node
+		const aggTableHead = document.createElement('thead');
+		aggTable.append(aggTableHead);
 		const tableHeader = document.createElement('tr');
-		aggTable.appendChild(tableHeader);
+		aggTableHead.appendChild(tableHeader);
 		
 		Object.keys(obj['aggregate'][0]).forEach(key => { 
 			const th = document.createElement('th');
@@ -264,8 +264,10 @@ function buildTable(json){
 		container.appendChild(rawTable);
 		
 		//Create header row of table using keys from first node
+		const rawTableHead = document.createElement('thead');
+		rawTable.append(rawTableHead);
 		const rawTableHeader = document.createElement('tr');
-		rawTable.appendChild(rawTableHeader);
+		rawTableHead.appendChild(rawTableHeader);
 		
 		Object.keys(obj['raw'][0]).forEach(key => { 
 			const th = document.createElement('th');

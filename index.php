@@ -11,7 +11,7 @@ include 'config.php';
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="bootstrap.css" rel="stylesheet">
-		<script src="functions.js?3"></script>
+		<script src="functions.js?4"></script>
 		<script>
 			window.onload = function() {
 				start();
@@ -19,8 +19,8 @@ include 'config.php';
 		</script>
 		<style>
 			.content{
-				background-color: #9E885E;
-
+				background-color: #dcc081;
+				//border: solid 2px #6F541D
 			}
 			body{
 				background-image: url("img/bg.avif");
@@ -55,7 +55,7 @@ include 'config.php';
 				text-align: left;
 			}
 			.selectedTab{
-				background-color: #9E885E;
+				background-color: #dbac64;
 				border-top: 1px solid black;
 				border-right: 1px solid black;
 				border-left: 1px solid black;
@@ -66,7 +66,7 @@ include 'config.php';
 				border-bottom-right-radius: 0px;
 			}
 			.unselectedTab{
-				background-color: #9E885E;
+				background-color: #dbac64;
 				border-top-left-radius: 10px;
 				border-top-right-radius: 10px;
 				border-bottom-left-radius: 0px;
@@ -75,13 +75,20 @@ include 'config.php';
 			.dataTable{
 				margin-left: auto;
 				margin-right: auto
-				padding-left: 5px;
-				padding-right: 5px;
+				/*padding-left: 5px;
+				padding-right: 5px;*/
 				border-collapse: collapse;
+				width: 98%;
 			}
 			.dataCell{
 				border-bottom: 1px solid #A9A79E;
 				border-left: 1px solid #A9A79E;
+			}
+			thead th {
+				position: sticky;
+				top: 0;
+				background-color: #dcc081;
+				z-index: 10;
 			}
 		</style>
  	</head>
@@ -96,7 +103,7 @@ include 'config.php';
 			
 				<div class="col-sm-2 border content">
 					<div class="row px-2 pt-2">
-						<button class="btn border" onclick="fetchData(this)">Get Data</button>
+						<button class="btn border" style="background-color: #dbac64;" onclick="fetchData(this)">Get Data</button>
 					</div>
 					<div class="row px-3">
 						 <label for="showSelectId">Show:</label><br><select id="showSelectId">
@@ -119,7 +126,7 @@ include 'config.php';
 					</div>				
 				</div>
 				<div class="col">
-					<div id="ResultsDiv" class="row p-1" style="overflow-x: hidden; overflow-y: auto; max-height: 700px;">
+					<div id="ResultsDiv" class="row p-1" style="overflow-x: auto; overflow-y: auto; max-height: 700px;">
 						<div class="content">
 							How to use this site.
 							<ul>
@@ -139,14 +146,14 @@ include 'config.php';
 					</div>
 				</div>
 			</div>
-			<div class="row border p-1 content">
+			<div class="row p-1 content">
 				<div class="col">
 					<p>Data for this project was obtained from:<br>
 					<a href="https://en.uesp.net/wiki/Morrowind:Merchants" target="_blank">https://en.uesp.net/wiki/Morrowind:Merchants</a><br>
 					<a href="https://en.uesp.net/wiki/Tribunal:Services#Merchants" target="_blank">https://en.uesp.net/wiki/Tribunal:Services#Merchants</a><br>
 					<a href="https://en.uesp.net/wiki/Bloodmoon:Merchants" target="_blank">https://en.uesp.net/wiki/Bloodmoon:Merchants</a></p>
 				</div>
-				<div class="col content">
+				<div class="col">
 					<p>Notes about the data:<br>
 					<ul>
 						<li>Todd Test and Lord Cluttermonkey merchants are not included in the data because they do not appear in the actual game.</li>

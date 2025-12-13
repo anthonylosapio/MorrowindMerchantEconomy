@@ -134,6 +134,8 @@ include 'config.php';
 								<li>Choose how you want the aggregated data to be sorted (always descending) either by Total Gold, Total Merchants, or Average Gold.</li>
 								<li>Expand the Race, Class, Expansion, Faction, & Location section to de-select anything you want to exclude from the final results & aggregation (for example, if you only want to see data for the base game, expand the "Expansion" section and un-select Tribunal & Bloodmoon).</li>
 								<li>Click the Get Data button</li>
+								<li>The results will have 2 tabs, one with the aggregated data and one containing the list of all merchants
+								that were included in the calculation.</li>
 							</ul>
 							<p>As an example, if you want to see which Faction has the most merchants in Vivec city you would:</p>
 							<ul>
@@ -151,7 +153,7 @@ include 'config.php';
 					<p>Data for this project was obtained from:<br>
 					<a href="https://en.uesp.net/wiki/Morrowind:Merchants" target="_blank">https://en.uesp.net/wiki/Morrowind:Merchants</a><br>
 					<a href="https://en.uesp.net/wiki/Tribunal:Services#Merchants" target="_blank">https://en.uesp.net/wiki/Tribunal:Services#Merchants</a><br>
-					<a href="https://en.uesp.net/wiki/Bloodmoon:Merchants" target="_blank">https://en.uesp.net/wiki/Bloodmoon:Merchants</a></p>
+					<a href="https://en.uesp.net/wiki/Bloodmoon:Merchants" target="_blank">https://en.uesp.net/wiki/Bloodmoon:Merchants</a></p>					
 				</div>
 				<div class="col">
 					<p>Notes about the data:<br>
@@ -162,6 +164,10 @@ include 'config.php';
 					</ul>
 					</p>
 				</div>
+				<div class="row" style="text-align: center;">
+				<p>If anyone knows where I can find merchant data for Tamriel Rebuilt (or other large landmass mods) please let me know.<br>
+				See something wrong with the data or the site? Let me know! <a href="mailto: morrowind@losapio.cc">morrowind@losapio.cc</a></p>
+				</div>				
 			</div>
 			<div class="row text-center">
 				<div class="col border my-1 text-center content">

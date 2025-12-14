@@ -199,14 +199,13 @@ if($function=="getData"){
 		echo json_encode($output);
 		
 		$ip = $_SERVER['REMOTE_ADDR'];
-		$query = "INSERT INTO logs (RemoteIP) VALUES ('$ip')";
+		$user_agent = $_SERVER['HTTP_USER_AGENT'];
+		$query = "INSERT INTO logs (RemoteIP, UserAgent) VALUES ('$ip','$user_agent')";
 		mysqli_query($con, $query);
 		
 	}catch(Exception $e){
 		echo $e->getMessage();
 	}
-	
-	
 }
 
 $con->close();

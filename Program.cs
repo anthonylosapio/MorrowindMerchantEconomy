@@ -163,7 +163,6 @@ namespace MorrowindJsonParser {
                         }
                     }
                     if(state==4){
-                        foreach(var item in CellRefs){Console.WriteLine(item);}
                         Cell newCell = new Cell();
                         newCell.CellName = CellName;
                         newCell.CellFlags = CellFlags;
@@ -174,13 +173,14 @@ namespace MorrowindJsonParser {
                 }
             }
 
-            foreach (var item in NpcList){
-                if(item.NpcGold > 0){
-                    //Console.WriteLine(item.NpcId + " " + item.NpcName + " " + item.NpcRace + " " + item.NpcClass + " " + item.NpcFaction + " " + item.NpcGold);
-                }
-
-            }
+            // foreach (var item in NpcList){
+            //     if(item.NpcGold > 0){
+            //         //Console.WriteLine(item.NpcId + " " + item.NpcName + " " + item.NpcRace + " " + item.NpcClass + " " + item.NpcFaction + " " + item.NpcGold);
+            //     }
+            // }
             
+            WriteNpcCsv("TR_Npc.csv", NpcList);
+
             foreach(var item in CellList){
                 foreach(var reference in item.CellRefs){
                     Console.WriteLine(item.CellName + " " + item.CellFlags + " " + reference);
@@ -188,6 +188,44 @@ namespace MorrowindJsonParser {
             }
         }
 
+    
+
+        static void WriteNpcCsv(string filePath, List<Npc> data) {
+            if (string.IsNullOrWhiteSpace(filePath))
+                throw new ArgumentException("File path cannot be empty.");
+
+            if (data == null || data.Count == 0)
+                throw new ArgumentException("No data to write.");
+
+            // Use UTF-8 encoding for compatibility
+            using (var writer = new StreamWriter(filePath, false, Encoding.UTF8)){
+                // Write header
+                writer.WriteLine("Name,Id,Race,Class,Faction,Gold");
+
+                // Write each record
+                foreach (var item in data){
+                    // Escape commas and quotes if needed
+                    string name = EscapeCsvField(item.NpcName);
+                    string id = EscapeCsvField(item.NpcId);
+                    string race = EscapeCsvField(item.NpcRace);
+                    string npcclass = EscapeCsvField(item.NpcClass);
+                    string faction = EscapeCsvField(item.NpcFaction);
+                    string gold = EscapeCsvField(item.NpcGold.ToString());
+
+                    writer.WriteLine($"{name},{id},{race},{npcclass},{faction},{gold}");
+                }
+            }
+        }
+
+        static string EscapeCsvField(string field)
+        {
+            if (field == null) return "";
+            if (field.Contains(",") || field.Contains("\"") || field.Contains("\n")){
+                field = field.Replace("\"", "\"\""); // Escape quotes
+                return $"\"{field}\""; //Wrap in quotes 
+            }
+            return field;
+        }
     }
 }
 

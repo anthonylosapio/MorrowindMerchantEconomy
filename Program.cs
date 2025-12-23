@@ -11,6 +11,11 @@ namespace MorrowindJsonParser {
         public string? NpcFaction {get; set;}
         public int? NpcGold {get; set;}
     }
+    class Cell{
+        public string? CellName {get; set;}
+        public string? CellFlags {get; set;}
+        public List<string>? CellRefs {get; set;}
+    }
 
     class Program {
         static void Main() {
@@ -22,8 +27,6 @@ namespace MorrowindJsonParser {
             };
 
             var reader = new Utf8JsonReader(jsonUtf8Bytes, options);
-            
-            int i =0;
 
             byte[] s_typeUtf8 = Encoding.UTF8.GetBytes("type");
             byte[] s_NpcUtf8 = Encoding.UTF8.GetBytes("Npc");
@@ -34,6 +37,9 @@ namespace MorrowindJsonParser {
             byte[] s_FactionUtf8 = Encoding.UTF8.GetBytes("faction");
             byte[] s_DataUtf8 = Encoding.UTF8.GetBytes("data");
             byte[] s_GoldUtf8 = Encoding.UTF8.GetBytes("gold");
+            byte[] s_CellUtf8 = Encoding.UTF8.GetBytes("Cell");
+            byte[] s_FlagsUtf8 = Encoding.UTF8.GetBytes("flags");
+            byte[] s_ReferencesUtf8 = Encoding.UTF8.GetBytes("references");
 
             string? NpcId = "";;
             string? NpcName = "";
@@ -42,9 +48,20 @@ namespace MorrowindJsonParser {
             string? NpcFaction = "";
             int? NpcGold = 0;
 
-            List<Npc> NpcList = new List<Npc>();
+            string? CellName = "";
+            string? CellFlags = "";
+            string? CellRef = "";
 
-            int state = 0; /*0: waiting to find type:npc*/
+            List<Npc> NpcList = new List<Npc>();
+            List<Cell> CellList = new List<Cell>();
+            List<string> CellRefs = new List<string>();
+
+            int state = 0; /*0: waiting to find type
+                             1: found/reading npc type object
+                             2: adding npc object to list
+                             3: found/reading cell type object
+                             4: adding cell object to list
+            */
 
             while (reader.Read() ) {
                                 
@@ -54,8 +71,11 @@ namespace MorrowindJsonParser {
 
                     if(reader.ValueTextEquals(s_typeUtf8) && state==0){ // the property name is "type"
                         reader.Read();
-                        if (reader.ValueTextEquals(s_NpcUtf8)){ // the value of type is "npc"
+                        if (reader.ValueTextEquals(s_NpcUtf8)){ // the value of type is "Npc"
                             state = 1;
+                        }
+                        if (reader.ValueTextEquals(s_CellUtf8)){ // the value of type is "Cell"
+                            state = 3;
                         }
                     }
 
@@ -83,18 +103,15 @@ namespace MorrowindJsonParser {
                                 NpcFaction = "None";
                             }
                         }
-                        if(reader.ValueTextEquals(s_DataUtf8)){//Npc's data array
-                            state = 2;
-                        }
-                    }
-                    if(state==2){
                         if(reader.ValueTextEquals(s_GoldUtf8)){//Npc's gold
                             reader.Read();
                             NpcGold = reader.GetInt16();
-                            state = 3;
+                            state = 2;
                         }
+
                     }
-                    if(state==3){
+
+                    if(state==2){
                         Npc newNpc = new Npc();
                         newNpc.NpcId = NpcId;
                         newNpc.NpcName = NpcName;
@@ -106,10 +123,68 @@ namespace MorrowindJsonParser {
                         state = 0;
                         NpcGold = 0;
                     }
+
+                    if (state == 3){ //Reading data from Cell object
+                        if(reader.ValueTextEquals(s_NameUtf8)){//Cell's Name
+                            reader.Read();
+                            CellName = reader.GetString();
+                        }
+                        if(reader.ValueTextEquals(s_DataUtf8)){//iterate through the data array
+                            while(reader.TokenType!=JsonTokenType.EndArray){
+                                reader.Read();
+                                if(reader.TokenType==JsonTokenType.PropertyName){
+                                    if(reader.ValueTextEquals(s_FlagsUtf8)){//get the cell flags
+                                        reader.Read();
+                                        CellFlags = reader.GetString();
+                                    }
+                                }
+                            }
+                            while(reader.TokenType!=JsonTokenType.PropertyName){reader.Read();}//continue reading till next property
+                        }
+                        if(reader.ValueTextEquals(s_ReferencesUtf8)){//iterate through the refernces objects
+                            reader.Read(); // read one item to pass the initial array start token.
+                            CellRefs.Clear();
+                            int closeOut = 1;
+                            while(closeOut!=0){
+                                reader.Read();
+                                if(reader.TokenType==JsonTokenType.EndArray){closeOut--;}
+                                if(reader.TokenType==JsonTokenType.StartArray){closeOut++;}
+                                if(reader.TokenType==JsonTokenType.PropertyName){
+                                    if(reader.ValueTextEquals(s_IdUtf8)){//get the cell flags
+                                        reader.Read();
+                                        CellRef = reader.GetString();
+                                        if(CellRef.StartsWith("TR_M", StringComparison.OrdinalIgnoreCase)){;
+                                            CellRefs.Add(CellRef);
+                                        }
+                                    }
+                                }
+                            }
+                            state = 4;
+                        }
+                    }
+                    if(state==4){
+                        foreach(var item in CellRefs){Console.WriteLine(item);}
+                        Cell newCell = new Cell();
+                        newCell.CellName = CellName;
+                        newCell.CellFlags = CellFlags;
+                        newCell.CellRefs = CellRefs;
+                        CellList.Add(newCell);
+                        state = 0;
+                     }
                 }
             }
+
             foreach (var item in NpcList){
-                Console.WriteLine(item.NpcId + " " + item.NpcName + " " + item.NpcRace + " " + item.NpcClass + " " + item.NpcFaction + " " + item.NpcGold);
+                if(item.NpcGold > 0){
+                    //Console.WriteLine(item.NpcId + " " + item.NpcName + " " + item.NpcRace + " " + item.NpcClass + " " + item.NpcFaction + " " + item.NpcGold);
+                }
+
+            }
+            
+            foreach(var item in CellList){
+                foreach(var reference in item.CellRefs){
+                    Console.WriteLine(item.CellName + " " + item.CellFlags + " " + reference);
+                }
             }
         }
 

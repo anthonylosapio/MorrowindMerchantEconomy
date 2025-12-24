@@ -54,7 +54,7 @@ namespace MorrowindJsonParser {
 
             List<Npc> NpcList = new List<Npc>();
             List<Cell> CellList = new List<Cell>();
-            List<string> CellRefs = new List<string>();
+            List<string> newCellRefs = new List<string>();
 
             int state = 0; /*0: waiting to find type
                              1: found/reading npc type object
@@ -62,7 +62,7 @@ namespace MorrowindJsonParser {
                              3: found/reading cell type object
                              4: adding cell object to list
             */
-
+            int i = 0;
             while (reader.Read() ) {
                                 
                 JsonTokenType tokenType = reader.TokenType;
@@ -119,7 +119,7 @@ namespace MorrowindJsonParser {
                         newNpc.NpcClass = NpcClass;
                         newNpc.NpcFaction = NpcFaction;
                         newNpc.NpcGold = NpcGold;
-                        NpcList.Add(newNpc);
+                        if(NpcGold > 0) NpcList.Add(newNpc);
                         state = 0;
                         NpcGold = 0;
                     }
@@ -143,33 +143,31 @@ namespace MorrowindJsonParser {
                         }
                         if(reader.ValueTextEquals(s_ReferencesUtf8)){//iterate through the refernces objects
                             reader.Read(); // read one item to pass the initial array start token.
-                            CellRefs.Clear();
+                            List<string> NewCellRefs = new List<string>();
                             int closeOut = 1;
                             while(closeOut!=0){
                                 reader.Read();
-                                if(reader.TokenType==JsonTokenType.EndArray){closeOut--;}
-                                if(reader.TokenType==JsonTokenType.StartArray){closeOut++;}
+                                if(reader.TokenType==JsonTokenType.EndArray) closeOut--;
+                                if(reader.TokenType==JsonTokenType.StartArray) closeOut++;
                                 if(reader.TokenType==JsonTokenType.PropertyName){
                                     if(reader.ValueTextEquals(s_IdUtf8)){//get the cell flags
                                         reader.Read();
                                         CellRef = reader.GetString();
                                         if(CellRef.StartsWith("TR_M", StringComparison.OrdinalIgnoreCase)){;
-                                            CellRefs.Add(CellRef);
+                                            NewCellRefs.Add(CellRef);
                                         }
                                     }
                                 }
                             }
-                            state = 4;
+                            Cell newCell = new Cell();
+                            newCell.CellName = CellName;
+                            newCell.CellFlags = CellFlags;
+                            newCell.CellRefs = NewCellRefs;
+                            if(NewCellRefs.Count > 0) CellList.Add(newCell);
+                            state = 0;
+                            
                         }
                     }
-                    if(state==4){
-                        Cell newCell = new Cell();
-                        newCell.CellName = CellName;
-                        newCell.CellFlags = CellFlags;
-                        newCell.CellRefs = CellRefs;
-                        CellList.Add(newCell);
-                        state = 0;
-                     }
                 }
             }
 
@@ -178,7 +176,7 @@ namespace MorrowindJsonParser {
             //         //Console.WriteLine(item.NpcId + " " + item.NpcName + " " + item.NpcRace + " " + item.NpcClass + " " + item.NpcFaction + " " + item.NpcGold);
             //     }
             // }
-            
+
             WriteNpcCsv("TR_Npc.csv", NpcList);
 
             foreach(var item in CellList){
@@ -187,8 +185,6 @@ namespace MorrowindJsonParser {
                 }
             }
         }
-
-    
 
         static void WriteNpcCsv(string filePath, List<Npc> data) {
             if (string.IsNullOrWhiteSpace(filePath))
@@ -217,8 +213,7 @@ namespace MorrowindJsonParser {
             }
         }
 
-        static string EscapeCsvField(string field)
-        {
+        static string EscapeCsvField(string field){
             if (field == null) return "";
             if (field.Contains(",") || field.Contains("\"") || field.Contains("\n")){
                 field = field.Replace("\"", "\"\""); // Escape quotes

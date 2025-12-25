@@ -9,6 +9,7 @@ namespace MorrowindJsonParser {
         public string? NpcRace {get; set;}
         public string? NpcClass {get; set;}
         public string? NpcFaction {get; set;}
+        public string? NpcLocation {get; set;}
         public int? NpcGold {get; set;}
     }
     class Cell{
@@ -171,19 +172,18 @@ namespace MorrowindJsonParser {
                 }
             }
 
-            // foreach (var item in NpcList){
-            //     if(item.NpcGold > 0){
-            //         //Console.WriteLine(item.NpcId + " " + item.NpcName + " " + item.NpcRace + " " + item.NpcClass + " " + item.NpcFaction + " " + item.NpcGold);
-            //     }
-            // }
-
-            WriteNpcCsv("TR_Npc.csv", NpcList);
-
-            foreach(var item in CellList){
-                foreach(var reference in item.CellRefs){
-                    Console.WriteLine(item.CellName + " " + item.CellFlags + " " + reference);
+            foreach (var npc in NpcList){
+                foreach(var cell in CellList){
+                    foreach(var reference in cell.CellRefs){
+                        if(npc.NpcId == reference){
+                            npc.NpcLocation = cell.CellName;
+                            Console.WriteLine(cell.CellName + " " + npc.NpcId);   
+                        }
+                    }
                 }
             }
+
+            WriteNpcCsv("TR_Npc.csv", NpcList);
         }
 
         static void WriteNpcCsv(string filePath, List<Npc> data) {
@@ -196,7 +196,7 @@ namespace MorrowindJsonParser {
             // Use UTF-8 encoding for compatibility
             using (var writer = new StreamWriter(filePath, false, Encoding.UTF8)){
                 // Write header
-                writer.WriteLine("Name,Id,Race,Class,Faction,Gold");
+                writer.WriteLine("Name,Id,Race,Class,Faction,Location,Gold");
 
                 // Write each record
                 foreach (var item in data){
@@ -206,9 +206,10 @@ namespace MorrowindJsonParser {
                     string race = EscapeCsvField(item.NpcRace);
                     string npcclass = EscapeCsvField(item.NpcClass);
                     string faction = EscapeCsvField(item.NpcFaction);
+                    string location = EscapeCsvField(item.NpcLocation);
                     string gold = EscapeCsvField(item.NpcGold.ToString());
 
-                    writer.WriteLine($"{name},{id},{race},{npcclass},{faction},{gold}");
+                    writer.WriteLine($"{name},{id},{race},{npcclass},{faction},{location},{gold}");
                 }
             }
         }

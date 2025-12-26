@@ -10,11 +10,13 @@ namespace MorrowindJsonParser {
         public string? NpcClass {get; set;}
         public string? NpcFaction {get; set;}
         public string? NpcLocation {get; set;}
+        public string? NpcRegion {get; set;}
         public int? NpcGold {get; set;}
     }
     class Cell{
         public string? CellName {get; set;}
         public string? CellFlags {get; set;}
+        public string? CellRegion {get; set;}
         public List<string>? CellRefs {get; set;}
     }
 
@@ -41,6 +43,7 @@ namespace MorrowindJsonParser {
             byte[] s_CellUtf8 = Encoding.UTF8.GetBytes("Cell");
             byte[] s_FlagsUtf8 = Encoding.UTF8.GetBytes("flags");
             byte[] s_ReferencesUtf8 = Encoding.UTF8.GetBytes("references");
+            byte[] s_RegionUtf8 = Encoding.UTF8.GetBytes("region");
 
             string? NpcId = "";;
             string? NpcName = "";
@@ -52,6 +55,7 @@ namespace MorrowindJsonParser {
             string? CellName = "";
             string? CellFlags = "";
             string? CellRef = "";
+            string? CellRegion = "";
 
             List<Npc> NpcList = new List<Npc>();
             List<Cell> CellList = new List<Cell>();
@@ -77,6 +81,9 @@ namespace MorrowindJsonParser {
                         }
                         if (reader.ValueTextEquals(s_CellUtf8)){ // the value of type is "Cell"
                             state = 3;
+                            CellRegion = "";
+                            CellName = "";
+                            CellFlags = "";
                         }
                     }
 
@@ -142,6 +149,10 @@ namespace MorrowindJsonParser {
                             }
                             while(reader.TokenType!=JsonTokenType.PropertyName){reader.Read();}//continue reading till next property
                         }
+                        if(reader.ValueTextEquals(s_RegionUtf8)){
+                            reader.Read();
+                            CellRegion = reader.GetString();    
+                        }
                         if(reader.ValueTextEquals(s_ReferencesUtf8)){//iterate through the refernces objects
                             reader.Read(); // read one item to pass the initial array start token.
                             List<string> NewCellRefs = new List<string>();
@@ -163,6 +174,7 @@ namespace MorrowindJsonParser {
                             Cell newCell = new Cell();
                             newCell.CellName = CellName;
                             newCell.CellFlags = CellFlags;
+                            newCell.CellRegion = CellRegion;
                             newCell.CellRefs = NewCellRefs;
                             if(NewCellRefs.Count > 0) CellList.Add(newCell);
                             state = 0;
@@ -171,13 +183,25 @@ namespace MorrowindJsonParser {
                     }
                 }
             }
-
+            //Add Cell Name & Region to Npc model
+            //Do some data cleanup
             foreach (var npc in NpcList){
+                npc.NpcClass = npc.NpcClass.Replace("T_Glb_","");
+                npc.NpcFaction = npc.NpcFaction.Replace("T_Mw_","");
+                npc.NpcFaction = npc.NpcFaction.Replace("TR_Fact_","");
+                if(npc.NpcRace=="T_Cnq_Keptu")npc.NpcRace = "Keptu";
+                if(npc.NpcRace=="T_Els_Cathay")npc.NpcRace = "Khajiit";
+                if(npc.NpcRace=="T_Els_Dagi-raht")npc.NpcRace = "Khajiit";
+                if(npc.NpcRace=="T_Els_Ohmes-raht")npc.NpcRace = "Khajiit";
+                if(npc.NpcRace=="T_Els_Suthay")npc.NpcRace = "Khajiit";
+                if(npc.NpcRace=="T_Hr_Riverfolk")npc.NpcRace = "Riverfolk";
+
                 foreach(var cell in CellList){
                     foreach(var reference in cell.CellRefs){
                         if(npc.NpcId == reference){
                             npc.NpcLocation = cell.CellName;
-                            Console.WriteLine(cell.CellName + " " + npc.NpcId);   
+                            npc.NpcRegion = cell.CellRegion;
+                            Console.WriteLine(cell.CellName + " " + npc.NpcId + " " + npc.NpcRegion);   
                         }
                     }
                 }
@@ -196,7 +220,7 @@ namespace MorrowindJsonParser {
             // Use UTF-8 encoding for compatibility
             using (var writer = new StreamWriter(filePath, false, Encoding.UTF8)){
                 // Write header
-                writer.WriteLine("Name,Id,Race,Class,Faction,Location,Gold");
+                writer.WriteLine("Name,Id,Race,Class,Faction,Location,Region, Gold");
 
                 // Write each record
                 foreach (var item in data){
@@ -207,9 +231,10 @@ namespace MorrowindJsonParser {
                     string npcclass = EscapeCsvField(item.NpcClass);
                     string faction = EscapeCsvField(item.NpcFaction);
                     string location = EscapeCsvField(item.NpcLocation);
+                    string region = EscapeCsvField(item.NpcRegion);
                     string gold = EscapeCsvField(item.NpcGold.ToString());
 
-                    writer.WriteLine($"{name},{id},{race},{npcclass},{faction},{location},{gold}");
+                    writer.WriteLine($"{name},{id},{race},{npcclass},{faction},{location},{region},{gold}");
                 }
             }
         }

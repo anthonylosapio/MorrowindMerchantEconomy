@@ -10,6 +10,8 @@ namespace MorrowindJsonParser {
         public string? NpcClass {get; set;}
         public string? NpcFaction {get; set;}
         public string? NpcLocation {get; set;}
+        public string? NpcCellname {get; set;}
+        public string? NpcSublocation {get; set;}
         public string? NpcRegion {get; set;}
         public int? NpcGold {get; set;}
     }
@@ -199,12 +201,28 @@ namespace MorrowindJsonParser {
                 foreach(var cell in CellList){
                     foreach(var reference in cell.CellRefs){
                         if(npc.NpcId == reference){
-                            npc.NpcLocation = cell.CellName;
+                            //Check if location contains comma, and if so split in NpcLocation & NpcSublocation
+                            if(cell.CellName.Contains(",")){
+                                int delimiterIndex = cell.CellName.IndexOf(",");
+                                npc.NpcCellname = cell.CellName.Substring(0, delimiterIndex);
+                                npc.NpcSublocation = cell.CellName.Substring(delimiterIndex+1);
+                            }else{
+                                npc.NpcCellname = cell.CellName;
+                            }
                             npc.NpcRegion = cell.CellRegion;
-                            Console.WriteLine(cell.CellName + " " + npc.NpcId + " " + npc.NpcRegion);   
                         }
                     }
                 }
+            }
+            //set the location for each npc, and do a little more cleanup
+            foreach(var npc in NpcList){
+                if(String.IsNullOrEmpty(npc.NpcCellname)){
+                    npc.NpcLocation = npc.NpcRegion;
+                }else{
+                    npc.NpcLocation = npc.NpcCellname;                    
+                }
+                if(npc.NpcLocation=="TR_HOLD_Silver Serpent" || npc.NpcLocation=="TR_HOLD_Firewatch Ext Merchants") npc.NpcLocation = "Firewatch";
+                if(npc.NpcLocation=="TR_HOLD_Necrom Lighthouse") npc.NpcLocation = "Necrom";
             }
 
             WriteNpcCsv("TR_Npc.csv", NpcList);
@@ -220,21 +238,26 @@ namespace MorrowindJsonParser {
             // Use UTF-8 encoding for compatibility
             using (var writer = new StreamWriter(filePath, false, Encoding.UTF8)){
                 // Write header
-                writer.WriteLine("Name,Id,Race,Class,Faction,Location,Region, Gold");
-
+                //writer.WriteLine("Name,Id,Race,Class,Faction,Location,Sublocation,Region, Gold");
+                writer.WriteLine("Name,Race,Class,Faction,Gold,Location,Expansion");
                 // Write each record
                 foreach (var item in data){
                     // Escape commas and quotes if needed
                     string name = EscapeCsvField(item.NpcName);
-                    string id = EscapeCsvField(item.NpcId);
+                    //string id = EscapeCsvField(item.NpcId);
                     string race = EscapeCsvField(item.NpcRace);
                     string npcclass = EscapeCsvField(item.NpcClass);
                     string faction = EscapeCsvField(item.NpcFaction);
                     string location = EscapeCsvField(item.NpcLocation);
-                    string region = EscapeCsvField(item.NpcRegion);
+                    //string sublocation = EscapeCsvField(item.NpcSublocation);
+                    //string region = EscapeCsvField(item.NpcRegion);
                     string gold = EscapeCsvField(item.NpcGold.ToString());
+                    string expansion = "Tamriel Rebuilt";
 
-                    writer.WriteLine($"{name},{id},{race},{npcclass},{faction},{location},{region},{gold}");
+                    //writer.WriteLine($"{name},{id},{race},{npcclass},{faction},{location},{sublocation},{region},{gold}");
+                    if(!String.IsNullOrEmpty(location)){
+                        writer.WriteLine($"{name},{race},{npcclass},{faction},{gold},{location},{expansion}");
+                    }
                 }
             }
         }

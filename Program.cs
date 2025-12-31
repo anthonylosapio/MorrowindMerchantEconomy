@@ -191,12 +191,20 @@ namespace MorrowindJsonParser {
                 npc.NpcClass = npc.NpcClass.Replace("T_Glb_","");
                 npc.NpcFaction = npc.NpcFaction.Replace("T_Mw_","");
                 npc.NpcFaction = npc.NpcFaction.Replace("TR_Fact_","");
+                npc.NpcFaction = npc.NpcFaction.Replace("T_Glb_","");
                 if(npc.NpcRace=="T_Cnq_Keptu")npc.NpcRace = "Keptu";
                 if(npc.NpcRace=="T_Els_Cathay")npc.NpcRace = "Khajiit";
                 if(npc.NpcRace=="T_Els_Dagi-raht")npc.NpcRace = "Khajiit";
                 if(npc.NpcRace=="T_Els_Ohmes-raht")npc.NpcRace = "Khajiit";
                 if(npc.NpcRace=="T_Els_Suthay")npc.NpcRace = "Khajiit";
                 if(npc.NpcRace=="T_Hr_Riverfolk")npc.NpcRace = "Riverfolk";
+                npc.NpcFaction = npc.NpcFaction.Replace("_"," ");
+                if(npc.NpcFaction=="ImperialNavy")npc.NpcFaction = "Imperial Navy";
+                if(npc.NpcFaction=="HouseIndoril")npc.NpcFaction = "House Indoril";
+                if(npc.NpcFaction=="SyvvitTong")npc.NpcFaction = "Syvvit Tong";
+                if(npc.NpcFaction=="JaNattaSyndicate")npc.NpcFaction = "Ja Natta Syndicate";
+                if(npc.NpcFaction=="JaNattaSyndicate")npc.NpcFaction = "Ja Natta Syndicate";
+                if(npc.NpcFaction=="HouseDres")npc.NpcFaction = "House Dres";
 
                 foreach(var cell in CellList){
                     foreach(var reference in cell.CellRefs){

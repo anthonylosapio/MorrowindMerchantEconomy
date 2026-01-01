@@ -7,11 +7,11 @@ include 'config.php';
 		<meta http-equiv=“Pragma” content=”no-cache”>
 		<meta http-equiv=“Expires” content=”-1″>
 		<meta http-equiv=“CACHE-CONTROL” content=”NO-CACHE”>
-		<title>The Morrowind Merchant Economy</title>
+		<title>The Morrowind Merchant Database</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="bootstrap.css" rel="stylesheet">
-		<script src="functions.js?4"></script>
+		<script src="functions.js?5"></script>
 		<script>
 			window.onload = function() {
 				start();
@@ -95,8 +95,8 @@ include 'config.php';
 	<body style="background-color: #2B1A08;">
 		<div class="container">
 			<div class="row border mb-2 content">
-				<h1>The Morrowind Merchant Economy</h1>
-				<p>How much money is there in Morrowind and who has it?</p>	
+				<h1>The Morrowind Merchant Database</h1>
+				<p>Now with Tamriel Rebuilt!</p>	
 			</div>
 
 			<div class="row mb-2">
@@ -153,7 +153,12 @@ include 'config.php';
 					<p>Data for this project was obtained from:<br>
 					<a href="https://en.uesp.net/wiki/Morrowind:Merchants" target="_blank">https://en.uesp.net/wiki/Morrowind:Merchants</a><br>
 					<a href="https://en.uesp.net/wiki/Tribunal:Services#Merchants" target="_blank">https://en.uesp.net/wiki/Tribunal:Services#Merchants</a><br>
-					<a href="https://en.uesp.net/wiki/Bloodmoon:Merchants" target="_blank">https://en.uesp.net/wiki/Bloodmoon:Merchants</a></p>					
+					<a href="https://en.uesp.net/wiki/Bloodmoon:Merchants" target="_blank">https://en.uesp.net/wiki/Bloodmoon:Merchants</a></p>
+					<p>
+					Tamariel Rebuilt merchants data was obtained by using <a href="https://github.com/Greatness7/tes3conv">tes3conv</a> to
+					convert the TR_Mainland.esm file released 2025-08-12 to json, then parsing out merchant data using 
+					<a href="https://github.com/anthonylosapio/MorrowindMerchantEconomy/blob/main/Program.cs">this</a> script.
+					</p>
 				</div>
 				<div class="col">
 					<p>Notes about the data:<br>
@@ -165,8 +170,7 @@ include 'config.php';
 					</p>
 				</div>
 				<div class="row" style="text-align: center;">
-				<p>If anyone knows where I can find merchant data for Tamriel Rebuilt (or other large landmass mods) please let me know.<br>
-				See something wrong with the data or the site? Let me know! <a href="mailto: morrowind@losapio.cc">morrowind@losapio.cc</a></p>
+				<p>See something wrong with the data or the site? Let me know! <a href="mailto: morrowind@losapio.cc">morrowind@losapio.cc</a></p>
 				</div>				
 			</div>
 			<div class="row text-center">

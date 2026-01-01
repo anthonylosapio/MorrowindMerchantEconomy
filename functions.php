@@ -176,7 +176,7 @@ if($function=="getData"){
 		
 	}
 
-	//echo $sql;
+
 	try{
 		$sql = "SELECT $groupby, COUNT(1) AS `Total Merchants`, SUM(Gold) AS `Total Gold`, AVG(Gold) AS `Average Gold` FROM morrowindeconomy WHERE $where GROUP BY $groupby ORDER BY $sortby DESC";		
 		$result = $con->query($sql);

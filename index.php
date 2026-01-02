@@ -11,7 +11,7 @@ include 'config.php';
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="bootstrap.css" rel="stylesheet">
-		<script src="functions.js?5"></script>
+		<script src="functions.js?8"></script>
 		<script>
 			window.onload = function() {
 				start();
@@ -155,7 +155,7 @@ include 'config.php';
 					<a href="https://en.uesp.net/wiki/Tribunal:Services#Merchants" target="_blank">https://en.uesp.net/wiki/Tribunal:Services#Merchants</a><br>
 					<a href="https://en.uesp.net/wiki/Bloodmoon:Merchants" target="_blank">https://en.uesp.net/wiki/Bloodmoon:Merchants</a></p>
 					<p>
-					Tamariel Rebuilt merchants data was obtained by using <a href="https://github.com/Greatness7/tes3conv">tes3conv</a> to
+					Tamariel Rebuilt merchant data was obtained by using <a href="https://github.com/Greatness7/tes3conv">tes3conv</a> to
 					convert the TR_Mainland.esm file released 2025-08-12 to json, then parsing out merchant data using 
 					<a href="https://github.com/anthonylosapio/MorrowindMerchantEconomy/blob/main/Program.cs">this</a> script.
 					</p>
@@ -175,7 +175,7 @@ include 'config.php';
 			</div>
 			<div class="row text-center">
 				<div class="col border my-1 text-center content">
-					<p>This project is open source <a href="https://github.com/anthonylosapio/MorrowindMerchantEconomy">https://github.com/anthonylosapio/MorrowindMerchantEconomy</a></p>
+					<p>This project is open source <a href="https://github.com/anthonylosapio/MorrowindMerchantEconomy">https://github.com/anthonylosapio/MorrowindMerchantEconomy</a> and all code was lovingly written by a human being.</p>
 					<p>This data has been queried <span style="font-weight: bold;">
 					<?php 
 						try{

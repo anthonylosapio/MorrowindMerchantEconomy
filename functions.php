@@ -124,11 +124,15 @@ if($function=="getRaces" || $function=="getClasses" || $function=="getLocations"
 	$filter = "";
 	if($function=="getRaces"){ $filter="Race"; }
 	if($function=="getClasses"){ $filter="Class"; }
-	if($function=="getLocations"){ $filter="Location"; }
 	if($function=="getExpansions"){ $filter="Expansion"; }
 	if($function=="getFactions"){ $filter="Faction"; }
+	if($function=="getLocations"){
+		$filter="Location";
+		$sql = "SELECT DISTINCT Expansion, $filter FROM morrowindeconomy ORDER BY Expansion, $filter ASC";
+	}else{
+		$sql = "SELECT DISTINCT $filter FROM morrowindeconomy ORDER BY $filter ASC";
+	}	
 	
-	$sql = "SELECT DISTINCT $filter FROM morrowindeconomy";
 	try{
 		$result = $con->query($sql);
 		$rows = array();

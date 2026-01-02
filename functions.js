@@ -3,7 +3,6 @@ const sections = ['Race','Location','Expansion','Class','Faction'];
 function getJSONData(name, value, sort, json, callback){
 
 	var params = "function="+name+"&value="+value+'&sort='+sort+'&json='+json;
-	//console.log(params);
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", "functions.php", true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -43,9 +42,11 @@ function addFilterElements(data){
 	container = document.getElementById("filterContainerDiv");
 		
 	const obj = JSON.parse(data);
-		
 	var sectionHeaderText = String(Object.keys(obj[0])).replace("[","").replace("'","").replace("]","");
-	
+
+	if(sectionHeaderText=='Expansion,Location'){//special case for Location becayse I want to group by expansion with a header
+		sectionHeaderText = 'Location';
+	}
 	
 	const div = document.createElement("div");
 	div.id = sectionHeaderText + "DivId";
@@ -76,13 +77,23 @@ function addFilterElements(data){
 	header.setAttribute('is-collapsed', '1');
 	header.setAttribute('onclick', 'toggleCollapse(this)');
 	
-	const cardDiv = document.createElement('div');
+	const cardDiv = document.createElement('div'); //Div to hold all of the checkboxes
 	collapsingDiv.appendChild(cardDiv);
+	
+	var expansion = '';
 	
 	for(var i=0; i<Object.keys(obj).length; i++){	
 		var value;
 		for (const key in obj[i]) {
 			value = obj[i][key];
+		}
+		
+		if(expansion!=obj[i]['Expansion'] && sectionHeaderText=='Location'){
+			expansion = obj[i]['Expansion'];
+			const expansionheader = document.createElement('div');
+			expansionheader.textContent = expansion;
+			expansionheader.style.fontWeight = 'bold';
+			cardDiv.appendChild(expansionheader);
 		}
 		
 		const checkbox = document.createElement('input');
@@ -181,7 +192,6 @@ function fetchData(b){
 	excludes = excludes + '}';
 
 	getJSONData("getData", selectValue, sortValue, excludes, function(data){
-		//console.log(data);
 		buildTable(data);
 		b.disabled = false;
 	});
@@ -190,9 +200,6 @@ function fetchData(b){
 function buildTable(json){
 	try {
 		const obj = JSON.parse(json);
-		
-		console.log(obj);
-		
 		
 		//get the container
 		const container = document.getElementById('ResultsDiv');
@@ -245,6 +252,10 @@ function buildTable(json){
 			Object.keys(obj['aggregate'][i]).forEach(key => {
 				let _value = obj['aggregate'][i][key];
 				
+				//format value for Gold column
+				if(key=='Total Gold'){
+					_value = Number(_value).toLocaleString('en-US');
+				}
 				const cell = document.createElement('td');
 				cell.textContent = _value;
 				cell.classList.add('dataCell');
@@ -291,14 +302,14 @@ function buildTable(json){
 		}
 		
 		//Iterate through all data
-		Object.keys(obj).forEach(key => {
+		//Object.keys(obj).forEach(key => {
 			
-			Object.keys(obj[key]).forEach(k => {
+		//	Object.keys(obj[key]).forEach(k => {
 				
 			//console.log(`Key2: ${k}, Value: ${obj[key][k]}`);
 				
-			});
-		});
+		//	});
+		//});
 	} catch (error) {
 		console.error("Error parsing JSON:", error.message);
 	}

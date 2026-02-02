@@ -80,6 +80,22 @@ function addFilterElements(data){
 	const cardDiv = document.createElement('div'); //Div to hold all of the checkboxes
 	collapsingDiv.appendChild(cardDiv);
 	
+	const label = document.createElement('label');
+	label.textContent = 'All';
+	label.htmlFor = sectionHeaderText + "AllCheckBoxId";
+	
+	const checkbox = document.createElement('input');
+	checkbox.type = 'checkbox';
+	checkbox.id = sectionHeaderText + "AllCheckBoxId";
+	checkbox.value = 'All';
+	checkbox.setAttribute('group', sectionHeaderText);
+	checkbox.setAttribute('onchange','selectAllCheckBox(this)');
+	checkbox.checked = true;
+	
+	cardDiv.appendChild(checkbox);
+	cardDiv.appendChild(label);
+	cardDiv.appendChild(document.createElement('br'));
+	
 	var expansion = '';
 	
 	for(var i=0; i<Object.keys(obj).length; i++){	
@@ -113,20 +129,7 @@ function addFilterElements(data){
 		cardDiv.appendChild(label);
 		cardDiv.appendChild(document.createElement('br'));
 	}
-	const checkbox = document.createElement('input');
-	checkbox.type = 'checkbox';
-	checkbox.id = sectionHeaderText + "AllCheckBoxId";
-	checkbox.value = 'All';
-	checkbox.setAttribute('group', sectionHeaderText);
-	checkbox.setAttribute('onchange','selectAllCheckBox(this)');
-	checkbox.checked = true;
 	
-	const label = document.createElement('label');
-	label.textContent = 'All';
-	label.htmlFor = sectionHeaderText + "AllCheckBoxId";
-			
-	cardDiv.appendChild(checkbox);
-	cardDiv.appendChild(label);
 }
 
 function toggleCollapse(h){
